@@ -26,6 +26,10 @@ class Connection:
             (self.end_node.y + pan_offset[1]) * zoom
         )
 
+        # Ensure start_pos and end_pos are valid
+        if start_pos == end_pos:  # Prevent drawing if positions are the same
+            return
+
         if dashed:
             self._draw_dashed_line(screen, start_pos, end_pos, zoom)
         else:
@@ -80,7 +84,7 @@ class Connection:
         # Draw the arrowhead
         pygame.draw.polygon(screen, self.color, [adjusted_end_pos, arrow_point1, arrow_point2])
 
-    def is_inside(self, x, y, tolerance=5):
+    def is_inside(self, x, y, tolerance=1):
         # Check if a point is on the connection line
         x1, y1 = self.start_node.x, self.start_node.y
         x2, y2 = self.end_node.x, self.end_node.y
@@ -91,8 +95,4 @@ class Connection:
         
         buffer = tolerance
 
-        print(f"d1: {d1}, d2: {d2}, line_length: {line_length}")
-        print(f"buffer: {buffer}")
-        print(f"abs(d1 + d2 - line_length): {abs(d1 + d2 - line_length)}")
-        
-        return abs(d1 + d2 - line_length) < buffer
+        return abs(d1 + d2 - line_length) < buffer  # Check if point is near the line

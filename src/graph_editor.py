@@ -139,6 +139,8 @@ class GraphEditor:
                 if self.selected_nodes:
                     self.selected_nodes.append(clicked_node)
 
+                    print(f"Selected nodes: {self.selected_nodes}")
+
                     # Create dashed connections between all selected nodes and the new node
                     new_connections = []  # List to hold newly created connections
                     for node in self.selected_nodes[:-1]:  # Exclude the newly added node
@@ -146,8 +148,14 @@ class GraphEditor:
                             temp_connection = Connection(node, clicked_node)
                             temp_connection.confirmed = False  # Mark as temporary
                             self.selected_connections.append(temp_connection)
+                        
                             new_connections.append(temp_connection)  # Add to the new connections list
-
+                    print(f"New connections: {new_connections}")
+                    print(f"Selected connections: {self.selected_connections}")
+                    # select all connections in selected_connections
+                    for connection in self.selected_connections:
+                        connection.selected = True
+                        self.connections.append(connection)
                     # Deselect all nodes
                     self.selected_nodes.clear()
 
@@ -192,7 +200,7 @@ class GraphEditor:
         
         # Draw connections
         for connection in self.connections:
-            if connection.selected:
+            if connection in self.selected_connections:
                 connection.draw(self.screen, self.pan_offset, self.zoom, dashed=True)
             else:
                 connection.draw(self.screen, self.pan_offset, self.zoom)
