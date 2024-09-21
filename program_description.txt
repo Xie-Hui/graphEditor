@@ -1,0 +1,49 @@
+# Graph Editor Application Requirements
+
+## Core Technology
+- The application is built using Pygame
+
+## Node Management
+- Create node: Press Enter to add a new node in the center of the canvas, avoiding overlap with existing nodes
+- Select node: Click on a node to highlight it (increased saturation) while graying out others with dashed borders
+- Multi-select: Use Shift+Click to select multiple nodes
+- Move node: Drag a node when the cursor is over it
+- Delete node(s): Select node(s) and press Delete to remove them and their connections
+- Highlight node(s): Selected node(s) will be highlighted with dashed borders
+
+## Canvas Interaction
+- Pan: Drag the canvas when the cursor is not on any node (infinite canvas)
+- Zoom: Use mouse wheel to zoom in and out
+- Clear: Press Esc to clear the entire canvas
+
+## Connection Management
+- When hit Enter, fist check if any connection(s) is created but not confirmed, if so, confirm it, if not, create a new node
+- Connection should show direction arrow
+- Select connection: Click on a connection to highlight by making it dashed
+- Create connection: When select a new node while there are already selected node(s), 
+create dashed line(s) between every selected node and the new node
+- Confirm connection: Press Enter to make the dashed line solid/permanent
+- Delete connection: Click on a connection and press Delete
+- Clear: Press Esc to clear the temporary connections
+
+
+## Data Import/Export
+- Export: Click export button to save the graph as a text-formatted dictionary
+- Import: Click import button to load a graph from a text-formatted dictionary
+
+## User Interface
+- Provide buttons for import and export functionality
+- Implement visual feedback for node selection and connection creation
+
+## Additional Features
+- Implement undo/redo functionality
+- Add ability to label nodes and connections
+- Include a mini-map for easier navigation on large graphs
+
+
+
+
+
+## Bugs
+- when dragging the node fast, the canvas panning incorrectly triggers
+[] node cannot connect to itself
