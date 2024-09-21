@@ -18,15 +18,19 @@ class GraphEditor:
         self.future = []
 
     def handle_event(self, event):
-        #print(f"GraphEditor Event type: {event.type}")
+        # Check for keydown events
         if event.type == pygame.KEYDOWN:
+            print(f"event.type: {event.type}, event.key: {event.key}")  # Log event type and key
+            # log key
+            print(f"event.key: {event.key}")
+            print(f"pygame.K_DELETE: {pygame.K_DELETE}")
             if event.key == pygame.K_RETURN:
                 # Confirm all selected connections
                 if self.selected_connections:
                     self.confirm_connections()  # Confirm all selected connections
                 else:
                     self.create_node()  # Create a new node if no connection is unconfirmed
-            elif event.key == pygame.K_DELETE:
+            elif event.key == pygame.K_BACKSPACE or event.key == 768:  # Handle DELETE key
                 self.delete_selected()
             elif event.key == pygame.K_ESCAPE:
                 self.selected_connections.clear()  # Clear only temporary connections
@@ -39,6 +43,7 @@ class GraphEditor:
             elif event.key == pygame.K_o and pygame.key.get_mods() & pygame.KMOD_CTRL:
                 self.load_graph()
 
+        # Check for mouse button down events
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Left click
                 self.handle_left_click(event.pos)
@@ -51,12 +56,14 @@ class GraphEditor:
             elif event.button == 7:  # Two-finger scroll down (trackpad)
                 self.zoom_out()
 
+        # Check for mouse motion events
         elif event.type == pygame.MOUSEMOTION:
             if event.buttons[0]:  # Left button held
                 self.handle_drag(event.pos, event.rel)
             else:
                 self.handle_mouse_motion(event.pos)
 
+        # Check for trackpad events
         elif event.type == pygame.FINGERDOWN:  # Trackpad touch down
             print("Trackpad touch down")
         elif event.type == pygame.FINGERMOTION:  # Trackpad motion
@@ -91,16 +98,21 @@ class GraphEditor:
         self.add_to_history()
 
     def delete_selected(self):
+        # Remove selected connections first
+        self.connections = [c for c in self.connections if not c.selected]
+
+        # Clear selection state for connections
+        for connection in self.connections:
+            connection.selected = False  # Deselect connections after deletion
+
         # Remove selected nodes and their connections
         for node in self.selected_nodes:
             self.nodes.remove(node)
-            self.connections = [c for c in self.connections if c.start != node and c.end != node]
+            # Remove connections associated with the node
+            self.connections = [c for c in self.connections if c.start_node != node and c.end_node != node]
+        
+        # Clear selected nodes after deletion
         self.selected_nodes.clear()
-
-        # Remove selected connections
-        self.connections = [c for c in self.connections if not c.selected]
-        for connection in self.connections:
-            connection.selected = False  # Deselect connections after deletion
 
         self.add_to_history()
 
